@@ -94,6 +94,21 @@ angular
         $scope.marketData()
 
      })
+     .controller('ClaimController', function ClaimController($scope, $state, $http) {
+    $scope.providers = [];
+
+    this.init = function() {
+        console.log('ClaimController.init()');
+        $http({
+            method: 'GET',
+            url: 'http://travelcoin-api.herokuapp.com/providers'
+        }).then(function(response) {
+            $scope.providers = response.data;
+        });
+    }
+
+    this.init();
+    })
      .service('userService', UserService)
     .factory('sessionFactory', function ($http, $log) {
 
