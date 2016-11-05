@@ -403,7 +403,13 @@ angular
              }).success(function (data) {
              userService.user = data
              }).error(genericError)*/
-            var response = JSON.parse('{"id":2,"assets":[{"id":3,"assetType":{"id":1,"provider":{"id":1,"name":"Accor"},"displayName":"points","conversionRate":5.00},"amount":20.00},{"id":4,"assetType":{"id":2,"provider":{"id":2,"name":"KLM"},"displayName":"miles","conversionRate":8.00},"amount":50.00}],"name":"Costin Aldea"}'
+            var response = JSON.parse('{"id":2,"assets":[{"id":3,"assetType":{"id":1,"provider":{"id":1,"name":"Accor"},"displayName":"points","conversionRate":5.00},"amount":20.00},' +
+                '{"id":4,"assetType":{"id":2,"provider":{"id":2,"name":"KLM"},"displayName":"miles","conversionRate":8.00},"amount":50.00},' +
+                '{"id":5,"assetType":{"id":2,"provider":{"id":2,"name":"Hilton"},"displayName":"miles","conversionRate":8.00},"amount":50.00},' +
+                '{"id":6,"assetType":{"id":2,"provider":{"id":2,"name":"KLM VIP"},"displayName":"miles","conversionRate":8.00},"amount":50.00},' +
+                '{"id":7,"assetType":{"id":2,"provider":{"id":2,"name":"Uber"},"displayName":"miles","conversionRate":8.00},"amount":50.00},' +
+                '{"id":8,"assetType":{"id":2,"provider":{"id":2,"name":"AirBnB"},"displayName":"miles","conversionRate":8.00},"amount":50.00}' +
+                '],"name":"Costin Aldea"}'
             )
             return response;
         }
