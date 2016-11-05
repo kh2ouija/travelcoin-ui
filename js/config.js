@@ -6,11 +6,13 @@
  * Initial there are written state for all view in theme.
  *
  */
-function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdleProvider, KeepaliveProvider) {
+function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdleProvider, $httpProvider, KeepaliveProvider) {
 
     // Configure Idle settings
     IdleProvider.idle(5); // in seconds
     IdleProvider.timeout(120); // in seconds
+
+    $httpProvider.defaults.headers.common['Authorization'] = "Basic c3RlZmFuQHRyYXZlbGNvaW4uY29tOnBhc3N3b3Jk"
 
     $urlRouterProvider.otherwise("/assets/assets-grid");
 

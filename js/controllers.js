@@ -43,9 +43,8 @@ function UserService($log, sessionFactory) {
 
 var mainController = function AssetController($scope, userService) {
     $scope.userService = userService;
-    $scope.username = "costin@travelcoin.com";
-    $scope.password = "demo@test.com";
-
+    $scope.username = "stefan@travelcoin.com";
+    $scope.password = "password";
 
     $scope.loginUser = function () {
         var user =  sessionFactory.retrieveUserAssets($scope.username, $scope.password);
@@ -62,8 +61,7 @@ angular
     .controller('AssetController', function AssetController($scope, userService, sessionFactory) {
         'use strict';
         $scope.userService = userService;
-        $scope.username = "costin@travelcoin.com";
-        $scope.password = "demo@test.com";
+
         $scope.assetdata = []
 
 
@@ -75,7 +73,15 @@ angular
         }
 
         $scope.assetData = function() {
-            $scope.assetdata = sessionFactory.retrieveUserAssets();
+             sessionFactory.retrieveUserAssets($scope.username, $scope.password).success(function (data) {
+                $scope.assetdata = data;
+                 var total = 0;
+                 for (var i = 0; i < $scope.assetdata.assets.length; i++) {
+                     total = total + $scope.assetdata.assets[i].amount;
+                 }
+
+                 $scope.assetdata.total = total;
+            })
         }
         $scope.assetData()
 
@@ -88,14 +94,102 @@ angular
         $scope.marketdata = []
 
         $scope.marketData = function() {
-            $scope.marketdata = sessionFactory.getMarketData();
+            $scope.marketdata = sessionFactory.getMarketData().success(function (data) {
+                $scope.marketdata = data
+            })
         }
 
         $scope.marketData()
 
      })
      .service('userService', UserService)
-    .factory('sessionFactory', function ($http, $log) {
+
+    .factory('Base64', function () {
+        /* jshint ignore:start */
+
+        var keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+
+        return {
+            encode: function (input) {
+                var output = "";
+                var chr1, chr2, chr3 = "";
+                var enc1, enc2, enc3, enc4 = "";
+                var i = 0;
+
+                do {
+                    chr1 = input.charCodeAt(i++);
+                    chr2 = input.charCodeAt(i++);
+                    chr3 = input.charCodeAt(i++);
+
+                    enc1 = chr1 >> 2;
+                    enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+                    enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+                    enc4 = chr3 & 63;
+
+                    if (isNaN(chr2)) {
+                        enc3 = enc4 = 64;
+                    } else if (isNaN(chr3)) {
+                        enc4 = 64;
+                    }
+
+                    output = output +
+                        keyStr.charAt(enc1) +
+                        keyStr.charAt(enc2) +
+                        keyStr.charAt(enc3) +
+                        keyStr.charAt(enc4);
+                    chr1 = chr2 = chr3 = "";
+                    enc1 = enc2 = enc3 = enc4 = "";
+                } while (i < input.length);
+
+                return output;
+            },
+
+            decode: function (input) {
+                var output = "";
+                var chr1, chr2, chr3 = "";
+                var enc1, enc2, enc3, enc4 = "";
+                var i = 0;
+
+                // remove all characters that are not A-Z, a-z, 0-9, +, /, or =
+                var base64test = /[^A-Za-z0-9\+\/\=]/g;
+                if (base64test.exec(input)) {
+                    window.alert("There were invalid base64 characters in the input text.\n" +
+                        "Valid base64 characters are A-Z, a-z, 0-9, '+', '/',and '='\n" +
+                        "Expect errors in decoding.");
+                }
+                input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+
+                do {
+                    enc1 = keyStr.indexOf(input.charAt(i++));
+                    enc2 = keyStr.indexOf(input.charAt(i++));
+                    enc3 = keyStr.indexOf(input.charAt(i++));
+                    enc4 = keyStr.indexOf(input.charAt(i++));
+
+                    chr1 = (enc1 << 2) | (enc2 >> 4);
+                    chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+                    chr3 = ((enc3 & 3) << 6) | enc4;
+
+                    output = output + String.fromCharCode(chr1);
+
+                    if (enc3 != 64) {
+                        output = output + String.fromCharCode(chr2);
+                    }
+                    if (enc4 != 64) {
+                        output = output + String.fromCharCode(chr3);
+                    }
+
+                    chr1 = chr2 = chr3 = "";
+                    enc1 = enc2 = enc3 = enc4 = "";
+
+                } while (i < input.length);
+
+                return output;
+            }
+        };
+
+        /* jshint ignore:end */
+    })
+    .factory('sessionFactory', function ($http, Base64) {
 
         var factory = {};
         $http.defaults.useXDomain = true;
@@ -106,33 +200,22 @@ angular
         }
 
         factory.retrieveUserAssets = function (username, password) {
-            var response = JSON.parse('{"id":2,"assets":[{"id":3,"assetType":{"id":1,"provider":{"id":1,"name":"Accor"},"displayName":"points","conversionRate":5.00},"amount":20.00},' +
-                '{"id":4,"assetType":{"id":2,"provider":{"id":2,"name":"KLM"},"displayName":"miles","conversionRate":8.00},"amount":50.00},' +
-                '{"id":5,"assetType":{"id":2,"provider":{"id":2,"name":"Hilton"},"displayName":"miles","conversionRate":8.00},"amount":50.00},' +
-                '{"id":6,"assetType":{"id":2,"provider":{"id":2,"name":"KLM VIP"},"displayName":"miles","conversionRate":8.00},"amount":50.00},' +
-                '{"id":7,"assetType":{"id":2,"provider":{"id":2,"name":"Uber"},"displayName":"miles","conversionRate":8.00},"amount":50.00},' +
-                '{"id":8,"assetType":{"id":2,"provider":{"id":2,"name":"AirBnB"},"displayName":"miles","conversionRate":8.00},"amount":50.00}' +
-                '],"name":"Costin Aldea"}'
-            )
-            return response;
+            return $http({
+                method: 'POST',
+                url: 'http://travelcoin-api.herokuapp.com/authenticate',
+                data: $.param({email:username}),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            });
         };
 
 
-        var auth = $base64.encode("foo:bar"),
-            headers = {"Authorization": "Basic " + auth};
-
         factory.getMarketData = function() {
-            var result = JSON.parse(
-                '{"id":2,"assets":[{"id":3,"assetType":{"id":1,"provider":{"id":1,"name":"Accor"},"displayName":"points","conversionRate":5.00, "category":"Accomodation"},"amount":20.00},' +
-                '{"id":4,"assetType":{"id":2,"provider":{"id":2,"name":"KLM"},"displayName":"miles","conversionRate":8.00},"amount":50.00, "category":"Transportation"},' +
-                '{"id":5,"assetType":{"id":2,"provider":{"id":2,"name":"Hilton"},"displayName":"miles","conversionRate":8.00},"amount":50.00, "category":"Accomodation"},' +
-                '{"id":6,"assetType":{"id":2,"provider":{"id":2,"name":"KLM VIP"},"displayName":"miles","conversionRate":8.00},"amount":50.00,  "category":"Transportation"},' +
-                '{"id":7,"assetType":{"id":2,"provider":{"id":2,"name":"Uber"},"displayName":"miles","conversionRate":8.00},"amount":50.00,  "category":"Transportation"},' +
-                '{"id":8,"assetType":{"id":2,"provider":{"id":2,"name":"AirBnB"},"displayName":"miles","conversionRate":8.00},"amount":50.00,  "category":"Accomodation"}' +
-                '],"name":"Costin Aldea"}'
-            )
-            return result;
-        }
+            return $http({
+                method: 'GET',
+                url: 'http://travelcoin-api.herokuapp.com/products'
+            });
+        };
 
         return factory;
-    });
+    })
+;

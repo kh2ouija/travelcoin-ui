@@ -1,18 +1,16 @@
-<nav class="navbar-default navbar-static-side" role="navigation">
+<nav class="navbar-default navbar-static-side" role="navigation" ng-controller="AssetController">
     <div class="sidebar-collapse">
         <ul side-navigation class="nav metismenu" id="side-menu">
             <li class="nav-header">
 
                 <div class="dropdown profile-element" dropdown>
-                    <img alt="image" class="img-circle" src="img/profile_small.jpg"/>
+                    <img alt="image" class="img-circle" src="http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802?d=identicon"/>
                     <a class="dropdown-toggle" dropdown-toggle href>
                             <span class="clear">
                                 <span class="block m-t-xs">
-                                    <strong class="font-bold">{{getUser().name }}</strong>
-
-                                    <strong class="font-bold">{{ getUser().user  | json }}</strong>
+                                    <strong class="font-bold">{{ assetdata.name }}</strong>
                              </span>
-                                <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
+                                <span class="text-muted text-xs block">Traveler <b class="caret"></b></span>
                             </span>
                     </a>
                 </div>
