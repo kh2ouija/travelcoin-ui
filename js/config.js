@@ -229,7 +229,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
             url: "/login_two_columns",
             templateUrl: "views/login_two_columns.html",
             data: { pageTitle: 'Please authenticate', specialClass: 'gray-bg' },
-            controller: 'AssetController'
+            controller: 'AppController'
         })
 
         .state('landing', {

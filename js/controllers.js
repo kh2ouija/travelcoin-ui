@@ -343,7 +343,7 @@ function UserService(sessionFactory) {
 
 }
 
-function AssetController($scope, $state, $log, userService) {
+function AppController($scope, $state, $log, userService) {
 
     this.userService = userService;
 
@@ -381,7 +381,7 @@ angular
     .controller('MainCtrl', MainCtrl)
     .controller('ngGridCtrl', ngGridCtrl)
     .controller('translateCtrl', translateCtrl)
-    .controller('AppController', AssetController)
+    .controller('AppController', AppController)
     .service('userService', UserService)
     .factory('sessionFactory', function ($http) {
 
