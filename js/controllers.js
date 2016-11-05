@@ -12,6 +12,16 @@ function MainCtrl($scope, $log, userService ) {
         '],"name":"Costin Aldea"}'
     )
 
+    this.maket =  JSON.parse(
+        '{"id":2,"assets":[{"id":3,"assetType":{"id":1,"provider":{"id":1,"name":"Accor"},"displayName":"points","conversionRate":5.00, "category":"Accomodation"},"amount":20.00},' +
+        '{"id":4,"assetType":{"id":2,"provider":{"id":2,"name":"KLM"},"displayName":"miles","conversionRate":8.00},"amount":50.00, "category":"Transportation"},' +
+        '{"id":5,"assetType":{"id":2,"provider":{"id":2,"name":"Hilton"},"displayName":"miles","conversionRate":8.00},"amount":50.00, "category":"Accomodation"},' +
+        '{"id":6,"assetType":{"id":2,"provider":{"id":2,"name":"KLM VIP"},"displayName":"miles","conversionRate":8.00},"amount":50.00,  "category":"Transportation"},' +
+        '{"id":7,"assetType":{"id":2,"provider":{"id":2,"name":"Uber"},"displayName":"miles","conversionRate":8.00},"amount":50.00,  "category":"Transportation"},' +
+        '{"id":8,"assetType":{"id":2,"provider":{"id":2,"name":"AirBnB"},"displayName":"miles","conversionRate":8.00},"amount":50.00,  "category":"Accomodation"}' +
+        '],"name":"Costin Aldea"}'
+    )
+
     this.username = "costin@travelcoin.com";
     this.password = "demo@test.com";
 
