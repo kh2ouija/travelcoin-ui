@@ -19,15 +19,10 @@
 </div>
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
-<!--
-        <div >
-            {{asset.id}}
-            {{asset.assetType.provider.name}}
-
-
-        </div>-->
-
-      <div class="col-md-3" ng-repeat="asset in main.userService.user.assets">
+        <button class="btn btn-primary dim" type="button"><i class="fa fa-money"></i></button>
+    </div>
+    <div class="row">
+      <div class="col-md-3" ng-repeat="asset in main.user.assets">
             <div class="ibox">
                 <div class="ibox-content product-box">
 
