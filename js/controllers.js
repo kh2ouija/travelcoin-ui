@@ -293,176 +293,6 @@ function MainCtrl($scope, userService) {
     };
 };
 
-
-function modalDemoCtrl($scope, $modal) {
-
-    $scope.open = function () {
-
-        var modalInstance = $modal.open({
-            templateUrl: 'views/modal_example.html',
-            controller: ModalInstanceCtrl
-        });
-    };
-
-    $scope.open1 = function () {
-        var modalInstance = $modal.open({
-            templateUrl: 'views/modal_example1.html',
-            controller: ModalInstanceCtrl
-        });
-    };
-
-    $scope.open2 = function () {
-        var modalInstance = $modal.open({
-            templateUrl: 'views/modal_example2.html',
-            controller: ModalInstanceCtrl,
-            windowClass: "animated fadeIn"
-        });
-    };
-
-    $scope.open3 = function (size) {
-        var modalInstance = $modal.open({
-            templateUrl: 'views/modal_example3.html',
-            size: size,
-            controller: ModalInstanceCtrl
-        });
-    };
-
-    $scope.open4 = function () {
-        var modalInstance = $modal.open({
-            templateUrl: 'views/modal_example2.html',
-            controller: ModalInstanceCtrl,
-            windowClass: "animated flipInY"
-        });
-    };
-};
-
-function ModalInstanceCtrl($scope, $modalInstance) {
-
-    $scope.ok = function () {
-        $modalInstance.close();
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-
-
-    $scope.states = [
-        'Alabama',
-        'Alaska',
-        'Arizona',
-        'Arkansas',
-        'California',
-        'Colorado',
-        'Connecticut',
-        'Delaware',
-        'Florida',
-        'Georgia',
-        'Hawaii',
-        'Idaho',
-        'Illinois',
-        'Indiana',
-        'Iowa',
-        'Kansas',
-        'Kentucky',
-        'Louisiana',
-        'Maine',
-        'Maryland',
-        'Massachusetts',
-        'Michigan',
-        'Minnesota',
-        'Mississippi',
-        'Missouri',
-        'Montana',
-        'Nebraska',
-        'Nevada',
-        'New Hampshire',
-        'New Jersey',
-        'New Mexico',
-        'New York',
-        'North Carolina',
-        'North Dakota',
-        'Ohio',
-        'Oklahoma',
-        'Oregon',
-        'Pennsylvania',
-        'Rhode Island',
-        'South Carolina',
-        'South Dakota',
-        'Tennessee',
-        'Texas',
-        'Utah',
-        'Vermont',
-        'Virginia',
-        'Washington',
-        'West Virginia',
-        'Wisconsin',
-        'Wyoming'
-    ];
-
-};
-
-
-/**
- * CalendarCtrl - Controller for Calendar
- * Store data events for calendar
- */
-function CalendarCtrl($scope) {
-
-    var date = new Date();
-    var d = date.getDate();
-    var m = date.getMonth();
-    var y = date.getFullYear();
-
-    // Events
-    $scope.events = [
-        {title: 'All Day Event', start: new Date(y, m, 1)},
-        {title: 'Long Event', start: new Date(y, m, d - 5), end: new Date(y, m, d - 2)},
-        {id: 999, title: 'Repeating Event', start: new Date(y, m, d - 3, 16, 0), allDay: false},
-        {id: 999, title: 'Repeating Event', start: new Date(y, m, d + 4, 16, 0), allDay: false},
-        {
-            title: 'Birthday Party',
-            start: new Date(y, m, d + 1, 19, 0),
-            end: new Date(y, m, d + 1, 22, 30),
-            allDay: false
-        },
-        {title: 'Click for Google', start: new Date(y, m, 28), end: new Date(y, m, 29), url: 'http://google.com/'}
-    ];
-
-
-    /* message on eventClick */
-    $scope.alertOnEventClick = function (event, allDay, jsEvent, view) {
-        $scope.alertMessage = (event.title + ': Clicked ');
-    };
-    /* message on Drop */
-    $scope.alertOnDrop = function (event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
-        $scope.alertMessage = (event.title + ': Droped to make dayDelta ' + dayDelta);
-    };
-    /* message on Resize */
-    $scope.alertOnResize = function (event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
-        $scope.alertMessage = (event.title + ': Resized to make dayDelta ' + minuteDelta);
-    };
-
-    /* config object */
-    $scope.uiConfig = {
-        calendar: {
-            height: 450,
-            editable: true,
-            header: {
-                left: 'prev,next',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay'
-            },
-            eventClick: $scope.alertOnEventClick,
-            eventDrop: $scope.alertOnDrop,
-            eventResize: $scope.alertOnResize
-        }
-    };
-
-    /* Event sources array */
-    $scope.eventSources = [$scope.events];
-}
-
 /**
  * ngGridCtrl - Controller for code ngGrid
  */
@@ -490,54 +320,6 @@ function ngGridCtrl($scope) {
     };
 }
 
-
-/**
- * notifyCtrl - Controller angular notify
- */
-function notifyCtrl($scope, notify) {
-    $scope.msg = 'Hello! This is a sample message!';
-    $scope.demo = function () {
-        notify({
-            message: $scope.msg,
-            classes: $scope.classes,
-            templateUrl: $scope.template
-        });
-    };
-    $scope.closeAll = function () {
-        notify.closeAll();
-    };
-
-    $scope.inspiniaTemplate = 'views/common/notify.html';
-    $scope.inspiniaDemo1 = function () {
-        notify({
-            message: 'Info - This is a Inspinia info notification',
-            classes: 'alert-info',
-            templateUrl: $scope.inspiniaTemplate
-        });
-    }
-    $scope.inspiniaDemo2 = function () {
-        notify({
-            message: 'Success - This is a Inspinia success notification',
-            classes: 'alert-success',
-            templateUrl: $scope.inspiniaTemplate
-        });
-    }
-    $scope.inspiniaDemo3 = function () {
-        notify({
-            message: 'Warning - This is a Inspinia warning notification',
-            classes: 'alert-warning',
-            templateUrl: $scope.inspiniaTemplate
-        });
-    }
-    $scope.inspiniaDemo4 = function () {
-        notify({
-            message: 'Danger - This is a Inspinia danger notification',
-            classes: 'alert-danger',
-            templateUrl: $scope.inspiniaTemplate
-        });
-    }
-}
-
 /**
  * translateCtrl - Controller for translate
  */
@@ -556,7 +338,7 @@ function UserService(sessionFactory) {
     }
 
     userService.getUserAssets = function () {
-        sessionFactory.retrieveUserAssets()
+       return sessionFactory.retrieveUserAssets()
     }
 
 }
@@ -585,9 +367,10 @@ function AssetController($scope, $state, $log, userService) {
 
     this.getUserAssets = function () {
        userService.user  = userService.getUserAssets()
+        $log.debug(userService.user)
     }
 
-    this.init()
+    this.init();
     this.getUserAssets()
 
 };
