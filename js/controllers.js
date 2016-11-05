@@ -335,10 +335,10 @@ function UserService(sessionFactory) {
     userService.user = {user: 'Demo'};
     userService.isAuthenticated = function () {
         return true;
-    }
+    };
 
-    userService.getUserAssets = function () {
-       return sessionFactory.retrieveUserAssets()
+    userService.getUserAssets = function (username, password) {
+        return sessionFactory.retrieveUserAssets(username, password)
     }
 
 }
@@ -351,7 +351,7 @@ function AppController($scope, $state, $log, userService) {
 
     this.init = function () {
         $log.debug("initiation controller")
-        if (!userService.user) {
+        if (!userService.isAuthenticated()) {
             $state.go("login_two_columns")
         }
 
@@ -361,17 +361,11 @@ function AppController($scope, $state, $log, userService) {
 
     this.loginUser = function (username, password) {
         alert("Hello user")
-        console.log("loggedin")
-        userService.user = {username: username, password: password}
-    }
-
-    this.getUserAssets = function () {
-       userService.user  = userService.getUserAssets()
+        userService = userService.getUserAssets(username, password)
         $log.debug(userService.user)
     }
 
     this.init();
-    this.getUserAssets()
 
 };
 
@@ -394,25 +388,13 @@ angular
             console.log(data || "Closing session failed")
         }
 
-        factory.retrieveUserAssets = function () {
-            /* $http({
-             method: 'POST',
-             url: 'http://192.168.2.140:8080/authenticate',
-             data: $.param({email:'costin@travelcoin.com'}),
-             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-             }).success(function (data) {
-             userService.user = data
-             }).error(genericError)*/
-            var response = JSON.parse('{"id":2,"assets":[{"id":3,"assetType":{"id":1,"provider":{"id":1,"name":"Accor"},"displayName":"points","conversionRate":5.00},"amount":20.00},' +
-                '{"id":4,"assetType":{"id":2,"provider":{"id":2,"name":"KLM"},"displayName":"miles","conversionRate":8.00},"amount":50.00},' +
-                '{"id":5,"assetType":{"id":2,"provider":{"id":2,"name":"Hilton"},"displayName":"miles","conversionRate":8.00},"amount":50.00},' +
-                '{"id":6,"assetType":{"id":2,"provider":{"id":2,"name":"KLM VIP"},"displayName":"miles","conversionRate":8.00},"amount":50.00},' +
-                '{"id":7,"assetType":{"id":2,"provider":{"id":2,"name":"Uber"},"displayName":"miles","conversionRate":8.00},"amount":50.00},' +
-                '{"id":8,"assetType":{"id":2,"provider":{"id":2,"name":"AirBnB"},"displayName":"miles","conversionRate":8.00},"amount":50.00}' +
-                '],"name":"Costin Aldea"}'
-            )
-            return response;
-        }
+        factory.retrieveUserAssets = function (username, password) {
+            $http({method: 'POST', url: 'http://travelcoin.herokuapp.com/authenticate ',
+                data: $.param({email: username, password: password}), headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).success(function (data) {
+                return data
+            }).error(genericError)
+        };
 
         return factory;
     });
