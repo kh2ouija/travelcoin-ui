@@ -8,7 +8,9 @@
                     <a class="dropdown-toggle" dropdown-toggle href>
                             <span class="clear">
                                 <span class="block m-t-xs">
-                                    <strong class="font-bold">{{ main.user.name }}</strong>
+                                    <strong class="font-bold">{{getUser().name }}</strong>
+
+                                    <strong class="font-bold">{{ getUser().user  | json }}</strong>
                              </span>
                                 <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
                             </span>

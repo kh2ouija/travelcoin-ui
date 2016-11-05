@@ -44,13 +44,15 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
         .state('assets.assets_grid', {
             url: "/assets-grid",
             templateUrl: "views/assets_grid.html",
-            data: { pageTitle: 'Assets list' }
+            data: { pageTitle: 'Assets list' },
+            controller: 'AssetController'
         })
 
         .state('assets.assets_grid_market', {
             url: "/assets-grid-market",
             templateUrl: "views/assets_grid_market.html",
-            data: { pageTitle: 'Market' }
+            data: { pageTitle: 'Market' },
+            controller: 'MarketController'
         })
 
         .state('login', {

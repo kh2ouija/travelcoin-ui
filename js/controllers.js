@@ -1,36 +1,3 @@
-function MainCtrl($scope, $log, userService ) {
-
-    this.userService = userService;
-
-
-    this.user =  JSON.parse('{"id":2,"assets":[{"id":3,"assetType":{"id":1,"provider":{"id":1,"name":"Accor"},"displayName":"points","conversionRate":5.00},"amount":20.00},' +
-        '{"id":4,"assetType":{"id":2,"provider":{"id":2,"name":"KLM"},"displayName":"miles","conversionRate":8.00},"amount":50.00},' +
-        '{"id":5,"assetType":{"id":2,"provider":{"id":2,"name":"Hilton"},"displayName":"miles","conversionRate":8.00},"amount":50.00},' +
-        '{"id":6,"assetType":{"id":2,"provider":{"id":2,"name":"KLM VIP"},"displayName":"miles","conversionRate":8.00},"amount":50.00},' +
-        '{"id":7,"assetType":{"id":2,"provider":{"id":2,"name":"Uber"},"displayName":"miles","conversionRate":8.00},"amount":50.00},' +
-        '{"id":8,"assetType":{"id":2,"provider":{"id":2,"name":"AirBnB"},"displayName":"miles","conversionRate":8.00},"amount":50.00}' +
-        '],"name":"Costin Aldea"}'
-    )
-
-    this.maket =  JSON.parse(
-        '{"id":2,"assets":[{"id":3,"assetType":{"id":1,"provider":{"id":1,"name":"Accor"},"displayName":"points","conversionRate":5.00, "category":"Accomodation"},"amount":20.00},' +
-        '{"id":4,"assetType":{"id":2,"provider":{"id":2,"name":"KLM"},"displayName":"miles","conversionRate":8.00},"amount":50.00, "category":"Transportation"},' +
-        '{"id":5,"assetType":{"id":2,"provider":{"id":2,"name":"Hilton"},"displayName":"miles","conversionRate":8.00},"amount":50.00, "category":"Accomodation"},' +
-        '{"id":6,"assetType":{"id":2,"provider":{"id":2,"name":"KLM VIP"},"displayName":"miles","conversionRate":8.00},"amount":50.00,  "category":"Transportation"},' +
-        '{"id":7,"assetType":{"id":2,"provider":{"id":2,"name":"Uber"},"displayName":"miles","conversionRate":8.00},"amount":50.00,  "category":"Transportation"},' +
-        '{"id":8,"assetType":{"id":2,"provider":{"id":2,"name":"AirBnB"},"displayName":"miles","conversionRate":8.00},"amount":50.00,  "category":"Accomodation"}' +
-        '],"name":"Costin Aldea"}'
-    )
-
-    this.username = "costin@travelcoin.com";
-    this.password = "demo@test.com";
-
-    this.loginUser = function () {
-        sessionFactory.retrieveUserAssets(username, password)
-        $log.debug( "you have been logged as: " + userService.user)
-    }
-};
-
 /**
  * ngGridCtrl - Controller for code ngGrid
  */
@@ -68,40 +35,69 @@ function translateCtrl($translate, $scope) {
 }
 
 
-function UserService($log) {
+function UserService($log, sessionFactory) {
     var userService = this;
-    var user = null;
+    var user = { name: ''};
+    this.user = {name: ''}
 }
 
-function AppController($scope, $state, $log, userService) {
-
-    this.userService = userService;
+var mainController = function AssetController($scope, userService) {
     $scope.userService = userService;
+    $scope.username = "costin@travelcoin.com";
+    $scope.password = "demo@test.com";
 
-    this.isAuthenticated = function() {
-      var result = userService.user != null;
-        $log.debug(result + " is the response for the authentication method")
-        return result
+
+    $scope.loginUser = function () {
+        var user =  sessionFactory.retrieveUserAssets($scope.username, $scope.password);
+        $scope.user = user;
+        $scope.userService.user = user;
+        console.log($scope.userService.user)
     }
 
-    this.init();
-
-};
-
+}
 
 angular
     .module('inspinia')
-    .controller('MainCtrl', MainCtrl)
+    .controller('MainController', mainController)
+    .controller('AssetController', function AssetController($scope, userService, sessionFactory) {
+        'use strict';
+        $scope.userService = userService;
+        $scope.username = "costin@travelcoin.com";
+        $scope.password = "demo@test.com";
+        $scope.assetdata = []
+
+
+        $scope.loginUser = function () {
+            var user =  sessionFactory.retrieveUserAssets($scope.username, $scope.password);
+            $scope.user = user;
+            $scope.userService.user = user;
+            console.log($scope.userService.user)
+        }
+
+        $scope.assetData = function() {
+            $scope.assetdata = sessionFactory.retrieveUserAssets();
+        }
+        $scope.assetData()
+
+    })
     .controller('ngGridCtrl', ngGridCtrl)
     .controller('translateCtrl', translateCtrl)
-    .controller('AppController', AppController)
-    .service('userService', UserService)
+    .controller('MarketController', function MarketController($scope, sessionFactory) {
+        'use strict';
+
+        $scope.marketdata = []
+
+        $scope.marketData = function() {
+            $scope.marketdata = sessionFactory.getMarketData();
+        }
+
+        $scope.marketData()
+
+     })
+     .service('userService', UserService)
     .factory('sessionFactory', function ($http, $log) {
 
         var factory = {};
-
-        var user = {}
-
         $http.defaults.useXDomain = true;
         $http.defaults.useXDomain = true;
 
@@ -110,14 +106,6 @@ angular
         }
 
         factory.retrieveUserAssets = function (username, password) {
-          /*  $http({
-             method: 'POST',
-             url: 'http://travelcoin.herokuapp.com/authenticate ',
-             data: $.param({email:'costin@travelcoin.com'}),
-             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-             }).success(function (data) {
-             return  data
-             }).error(genericError)*/
             var response = JSON.parse('{"id":2,"assets":[{"id":3,"assetType":{"id":1,"provider":{"id":1,"name":"Accor"},"displayName":"points","conversionRate":5.00},"amount":20.00},' +
                 '{"id":4,"assetType":{"id":2,"provider":{"id":2,"name":"KLM"},"displayName":"miles","conversionRate":8.00},"amount":50.00},' +
                 '{"id":5,"assetType":{"id":2,"provider":{"id":2,"name":"Hilton"},"displayName":"miles","conversionRate":8.00},"amount":50.00},' +
@@ -127,6 +115,23 @@ angular
                 '],"name":"Costin Aldea"}'
             )
             return response;
+        };
+
+
+        var auth = $base64.encode("foo:bar"),
+            headers = {"Authorization": "Basic " + auth};
+
+        factory.getMarketData = function() {
+            var result = JSON.parse(
+                '{"id":2,"assets":[{"id":3,"assetType":{"id":1,"provider":{"id":1,"name":"Accor"},"displayName":"points","conversionRate":5.00, "category":"Accomodation"},"amount":20.00},' +
+                '{"id":4,"assetType":{"id":2,"provider":{"id":2,"name":"KLM"},"displayName":"miles","conversionRate":8.00},"amount":50.00, "category":"Transportation"},' +
+                '{"id":5,"assetType":{"id":2,"provider":{"id":2,"name":"Hilton"},"displayName":"miles","conversionRate":8.00},"amount":50.00, "category":"Accomodation"},' +
+                '{"id":6,"assetType":{"id":2,"provider":{"id":2,"name":"KLM VIP"},"displayName":"miles","conversionRate":8.00},"amount":50.00,  "category":"Transportation"},' +
+                '{"id":7,"assetType":{"id":2,"provider":{"id":2,"name":"Uber"},"displayName":"miles","conversionRate":8.00},"amount":50.00,  "category":"Transportation"},' +
+                '{"id":8,"assetType":{"id":2,"provider":{"id":2,"name":"AirBnB"},"displayName":"miles","conversionRate":8.00},"amount":50.00,  "category":"Accomodation"}' +
+                '],"name":"Costin Aldea"}'
+            )
+            return result;
         }
 
         return factory;
