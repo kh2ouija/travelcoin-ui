@@ -18,29 +18,53 @@
     </div>
 </div>
 <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <button class="btn btn-primary dim" type="button"><i class="fa fa-money"></i></button>
+    <div class="file-manager">
+        <div class="hr-line-dashed"></div>
+        <h5 class="tag-title">Tags</h5>
+        <ul class="tag-list" style="padding: 0">
+            <li><a href="">Nearby</a></li>
+            <li><a href="">Attractions</a></li>
+            <li><a href="">Shopping</a></li>
+            <li><a href="">Activities</a></li>
+            <li><a href="">Excursions</a></li>
+            <li><a href="">Events</a></li>
+            <li><a href="">Eating & Drinking</a></li>
+            <li><a href="">Nightlife</a></li>
+        </ul>
+        <div class="clearfix"></div>
+        <div class="hr-line-dashed"></div>
     </div>
+
     <div class="row">
-      <div class="col-md-3" ng-repeat="asset in marketdata">
+        <div class="col-md-3" ng-repeat="asset in marketdata">
             <div class="ibox">
                 <div class="ibox-content product-box">
-
                     <div class="product-imitation">
-                        <img src="{{asset.imageUrl}}" style="max-width: 90%;" />
+                        <img ng-show="!showMap" src="{{asset.imageUrl}}" style="max-width: 90%;"/>
+                        <img ng-show="showMap" src="{{asset.mapUrl}}" style="max-width: 90%;" ng-show="hidden"/>
+                        <div class="m-t text-righ">
+                            <a href="#" ng-show="!showMap" ng-click="showMap = true"
+                               class="btn btn-xs btn-outline btn-primary">Location
+                                <i class="fa fa-long-arrow-right"></i> </a>
+                            <a href="#" ng-show="showMap" ng-click="showMap = false"
+                               class="btn btn-xs btn-outline btn-primary">Back
+                                <i class="fa fa-long-arrow-right"></i> </a>
+                        </div>
                     </div>
                     <div class="product-desc">
                                 <span class="product-price">
                                     <i class="fa-btc"/> {{asset.price}}
                                 </span>
-                        <small class="text-muted">Category: Accomodation </small>
-                        <a href="#" class="product-name">   {{asset.title | uppercase }}</a>
+                        <small class="text-muted">Category: Accomodation</small>
+                        <a href="#" class="product-name"> {{asset.title | uppercase }}</a>
+                        <p><i class="fa fa-map-marker"></i> Riviera State 32/106</p>
                         <div class="small m-t-xs">
                             {{asset.description}}
                         </div>
                         <div class="m-t text-righ">
-
-                            <a href="#" class="btn btn-xs btn-outline btn-primary">Info <i class="fa fa-long-arrow-right"></i> </a>
+                            <a href="#" class="btn btn-xs btn-outline btn-primary">Info <i
+                                    class="fa fa-long-arrow-right"></i> </a>
+                            <a class="btn btn-xs btn-danger"><i class="fa fa-heart"></i> Whishlist</a>
                         </div>
                     </div>
                 </div>
@@ -49,9 +73,7 @@
     </div>
 
 
-    </div>
-
-
+</div>
 
 
 </div>
