@@ -27,13 +27,13 @@
                 <div class="ibox-content product-box">
 
                     <div class="product-imitation">
-                        [ INFO ]
+                        <img src="{{asset.assetType.imageUrl}}" style="max-width: 90%;" />
                     </div>
                     <div class="product-desc">
                                 <span class="product-price">
                                     <i class="fa-btc"/> {{asset.amount}}
                                 </span>
-                        <small class="text-muted">Category</small>
+                        <small class="text-muted">{{asset.assetType.category}}</small>
                         <a href="#" class="product-name">   {{asset.assetType.provider.name | uppercase }}</a>
 
 
