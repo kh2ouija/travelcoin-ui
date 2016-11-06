@@ -56,6 +56,12 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
             data: { pageTitle: 'Market' },
             controller: 'MarketController'
         })
+        .state('assets.assets_grid_market_maps', {
+            url: "/assets-grid-market-maps",
+            templateUrl: "views/google_maps.html",
+            data: { pageTitle: 'Market' },
+            controller: 'MarketController'
+        })
 
         .state('login', {
             url: "/login",
