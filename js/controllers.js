@@ -88,15 +88,25 @@ angular
     })
     .controller('ngGridCtrl', ngGridCtrl)
     .controller('translateCtrl', translateCtrl)
-    .controller('MarketController', function MarketController($scope, sessionFactory) {
+    .controller('MarketController', function MarketController($scope, $rootScope, sessionFactory, geolocationFactory) {
         'use strict';
 
         $scope.marketdata = []
+
+        $scope.geolocation = ''
+
+
+
 
         $scope.marketData = function() {
             $scope.marketdata = sessionFactory.getMarketData().success(function (data) {
                 $scope.marketdata = data
             })
+
+             geolocationFactory.getCurrentPosition().then(function (location) {
+                 $scope.geolocation = location;
+                 console.log($scope.geolocation)
+             })
         }
 
         $scope.marketData()
@@ -207,6 +217,8 @@ angular
     .factory('sessionFactory', function ($http, Base64) {
 
         var factory = {};
+        var endpoint = "http://travelcoin-api.herokuapp.com"
+
         $http.defaults.useXDomain = true;
         $http.defaults.useXDomain = true;
 
@@ -217,22 +229,45 @@ angular
         factory.retrieveUserAssets = function (username, password) {
             return $http({
                 method: 'POST',
-                url: 'http://travelcoin-api.herokuapp.com/authenticate',
-                //url: 'http://localhost:8080/authenticate',
+                url: endpoint +'/authenticate',
                 data: $.param({email:username}),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             });
         };
 
-
         factory.getMarketData = function() {
             return $http({
                 method: 'GET',
-                url: 'http://travelcoin-api.herokuapp.com/products'
-                //url: 'http://localhost:8080/products'
+                url: endpoint + '/products'
             });
         };
 
         return factory;
     })
+    .factory('geolocationFactory', ['$q', '$window', function ($q, $window) {
+
+        'use strict';
+
+        function getCurrentPosition() {
+            var deferred = $q.defer();
+
+            if (!$window.navigator.geolocation) {
+                deferred.reject('Geolocation not supported.');
+            } else {
+                $window.navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        deferred.resolve(position);
+                    },
+                    function (err) {
+                        deferred.reject(err);
+                    });
+            }
+
+            return deferred.promise;
+        }
+
+        return {
+            getCurrentPosition: getCurrentPosition
+        };
+    }])
 ;
