@@ -39,6 +39,7 @@ function UserService($log, sessionFactory) {
     var userService = this;
     var user = { name: ''};
     this.user = {name: ''}
+    var location = []
 }
 
 var mainController = function AssetController($scope, userService) {
@@ -88,15 +89,12 @@ angular
     })
     .controller('ngGridCtrl', ngGridCtrl)
     .controller('translateCtrl', translateCtrl)
-    .controller('MarketController', function MarketController($scope, $rootScope, sessionFactory, geolocationFactory) {
+    .controller('MarketController', function MarketController($scope, $rootScope, sessionFactory, geolocationFactory, $timeout) {
         'use strict';
 
         $scope.marketdata = []
 
         $scope.geolocation = ''
-
-
-
 
         $scope.marketData = function() {
             $scope.marketdata = sessionFactory.getMarketData().success(function (data) {
@@ -106,6 +104,11 @@ angular
              geolocationFactory.getCurrentPosition().then(function (location) {
                  $scope.geolocation = location;
                  console.log($scope.geolocation)
+                 $timeout(function() {
+                     $scope.$apply();
+                     console.log('update with timeout fired')
+                 }, 3000);
+
              })
         }
 
